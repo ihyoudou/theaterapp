@@ -2,7 +2,10 @@ from django.urls import path
 
 from . import views
 
+app_name = "core"
+
 urlpatterns = [
     path('', views.index, name='index'),
-    path('details/<int:id>', views.movieDetails, name="movieDetails")
+    path('details/<int:id>', views.movieDetails, name="movieDetails"),
+    path('buyTicket/<int:id>', views.buyMovieTicket, name="buyMovieTicket")
 ]

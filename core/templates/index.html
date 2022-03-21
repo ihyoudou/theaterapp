@@ -2,6 +2,18 @@
 {% block content %}
 
 <div class="container">
+
+    {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+              {{ message }}
+          </li>
+          {% endfor %}
+      </ul>
+    {% endif %}
+    
     <table class="table">
         <thead>
           <tr>
@@ -16,12 +28,12 @@
         <tbody>
             {% for movie in movies %}
             <tr>
-                <th scope="row">1</th>
+                <th scope="row">{{movie.id}}</th>
                 <td>{{movie.title}}</td>
                 <td>{{movie.release_date|date:"Y"}}</td>
                 <td></td>
                 <td>{{movie.price}}</td>
-                <td><a href="{% url 'movieDetails' movie.id %}"><button class="btn btn-primary">View</button></a></td>
+                <td><a href="{% url 'core:movieDetails' movie.id %}"><button class="btn btn-primary">View</button></a></td>
             </tr>
         
             {% endfor %}

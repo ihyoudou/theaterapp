@@ -2,13 +2,20 @@
 {% block content %}
 
 <div class="container">
-    Title:
-    {{movie.title}}<br>
+    <div class="row">
+        <div class="col">
+            <h1>{{movie.title}}</h1>
 
-    {{movie.description}}<br>
+            <p>Description:<br>
+                {{movie.description}}
+            </p>
+            <p>Released: {{movie.release_date}}</p>
+            <p>Ratings: </p>
 
-    {{movie.release_date}}<br>
+            <p>Ticket price: {{movie.price}}</p>
+            <a href="{% url 'core:buyMovieTicket' movie.id %}"><button class="btn btn-primary">Buy ticket</button></a>
+        </div>
+    </div>
 
-    {{movie.price}}<br>
 </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
@@ -26,5 +26,18 @@ def movieDetails(request, id):
             'movie': movie
         }
         return render(request, 'details.html', context)
+    except ObjectDoesNotExist as err:
+        return HttpResponse("not found")
+
+def buyMovieTicket(request, id):
+
+    try:
+        movie = Movies.objects.get(pk=id)
+
+        context = {
+            'title': "Buy ticket",
+            'ticket_price': movie.price
+        }
+        return render(request, 'form.html', context)
     except ObjectDoesNotExist as err:
         return HttpResponse("not found")
