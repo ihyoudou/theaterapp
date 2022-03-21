@@ -13,4 +13,9 @@ class Ratings(models.Model):
     rating = models.IntegerField()
     rated_by = models.IntegerField()
     movieID = models.ForeignKey(Movies, on_delete=models.CASCADE)
+
+class MovieInfo(models.Model):
+    movie = models.ForeignKey(Movies, on_delete=models.CASCADE)
+    director = models.CharField(max_length=200, null=True)
+
     
