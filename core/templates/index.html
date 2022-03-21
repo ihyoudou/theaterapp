@@ -1,0 +1,32 @@
+{% extends '_base.html' %}
+{% block content %}
+
+<div class="container">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Release year</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Price</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for movie in movies %}
+            <tr>
+                <th scope="row">1</th>
+                <td>{{movie.title}}</td>
+                <td>{{movie.release_date|date:"Y"}}</td>
+                <td></td>
+                <td>{{movie.price}}</td>
+                <td><a href="{% url 'movieDetails' movie.id %}"><button class="btn btn-primary">View</button></a></td>
+            </tr>
+        
+            {% endfor %}
+        </tbody>
+      </table>
+    
+</div>
+{% endblock %}

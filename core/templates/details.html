@@ -1,8 +1,14 @@
-Title:
-{{movie.title}}<br>
+{% extends '_base.html' %}
+{% block content %}
 
-{{movie.description}}<br>
+<div class="container">
+    Title:
+    {{movie.title}}<br>
 
-{{movie.release_date}}<br>
+    {{movie.description}}<br>
 
-{{movie.price}}<br>
+    {{movie.release_date}}<br>
+
+    {{movie.price}}<br>
+</div>
+{% endblock %}
