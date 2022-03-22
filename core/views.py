@@ -50,11 +50,9 @@ def rateMovie(request):
         if request.user:
             rate = body['rate']
             movie = Movies.objects.get(pk=body['movieID'])
-
-            
+        
             if not Ratings.objects.filter(rated_by=request.user.id, movieID=movie):
                 
-
                 rating = Ratings()
                 rating.rating = rate
                 rating.rated_by = request.user.id
