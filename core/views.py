@@ -1,14 +1,14 @@
 from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Movies
+from .models import Movies, Ratings
 from userAccount.models import Orders
-
+import json
 # Create your views here.
 
 def index(request):
@@ -32,6 +32,33 @@ def movieDetails(request, id):
     except ObjectDoesNotExist as err:
         return HttpResponse("not found")
 
+@login_required
+def rateMovie(request):
+
+    body = json.loads(request.body)
+    if body:
+        if request.user:
+            rate = body['rate']
+            movie = Movies.objects.get(pk=body['movieID'])
+
+            print(Ratings.objects.filter(rated_by=request.user.id, movieID=movie))
+            if not Ratings.objects.filter(rated_by=request.user.id, movieID=movie):
+                
+
+                rating = Ratings()
+                rating.rating = rate
+                rating.rated_by = request.user.id
+                rating.movieID = movie
+
+                rating.save()
+
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'reason': 'this user already rated that movie'})
+        else:
+            return JsonResponse({'success': False, 'reason':'user is not authenticated'}) 
+    else:
+        return JsonResponse({'success': False, 'reason': 'not a POST request'})
 @login_required
 def buyMovieTicket(request, id):
 

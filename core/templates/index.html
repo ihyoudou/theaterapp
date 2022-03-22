@@ -1,6 +1,7 @@
 {% extends '_base.html' %}
 {% block content %}
 
+{% include '_navbar.html' %}
 <div class="container">
 
     {% if messages %}
@@ -31,7 +32,7 @@
                 <th scope="row">{{movie.id}}</th>
                 <td>{{movie.title}}</td>
                 <td>{{movie.release_date|date:"Y"}}</td>
-                <td></td>
+                <td>{{movie.avgRating}}</td>
                 <td>{{movie.price}}</td>
                 <td><a href="{% url 'core:movieDetails' movie.id %}"><button class="btn btn-primary">View</button></a></td>
             </tr>

@@ -1,6 +1,9 @@
 {% extends '_base.html' %}
 {% block content %}
 
+{% include '_navbar.html' %}
+
+
 <div class="container">
     <div class="row">
         <div class="col">
@@ -10,12 +13,72 @@
                 {{movie.description}}
             </p>
             <p>Released: {{movie.release_date}}</p>
-            <p>Ratings: </p>
+            <p>Ratings: {{movie.avgRating}} (based on {{movie.countRating}} ratings)</p>
+            <div>
+                <p>Rate this movie:</p>
+                <span>
+                <select id="selectMovieRate">
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
+                <button class="btn btn-primary btn-sm" id="buttonRate">Rate</button>
+                <div id="spinner"></div>
+            </span>
+            </div>
 
             <p>Ticket price: {{movie.price}}</p>
             <a href="{% url 'core:buyMovieTicket' movie.id %}"><button class="btn btn-primary">Buy ticket</button></a>
         </div>
+        <div class="col">
+            <img src="https://picsum.photos/400/600" class="img-fluid" alt="movie poster">
+        </div>
     </div>
 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+
+        document.getElementById('buttonRate').addEventListener('click', sendFeedback, true);
+
+        function sendFeedback(){
+            rating = document.getElementById("selectMovieRate");
+            movieID = '{{movie.id}}';
+
+            fetch("{% url 'core:rateMovie' %}", {
+                method: "POST",
+                headers: {'X-CSRFToken': csrftoken},
+                body: JSON.stringify({
+                    rate: rating.value,
+                    movieID: movieID
+                })
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+            })
+            console.log(movieID);
+        }
+    })
+</script>
 {% endblock %}

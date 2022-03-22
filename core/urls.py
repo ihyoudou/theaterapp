@@ -7,5 +7,6 @@ app_name = "core"
 urlpatterns = [
     path('', views.index, name='index'),
     path('details/<int:id>', views.movieDetails, name="movieDetails"),
-    path('buyTicket/<int:id>', views.buyMovieTicket, name="buyMovieTicket")
+    path('buyTicket/<int:id>', views.buyMovieTicket, name="buyMovieTicket"),
+    path('api/rateMovie', views.rateMovie, name="rateMovie")
 ]
