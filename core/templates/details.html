@@ -8,22 +8,23 @@
     <div class="row">
         <div class="col">
             <h1>{{movie.title}}</h1>
-
-            <p>Description:<br>
-                {{movie.description}}
-            </p>
-            <p>Released: {{movie.release_date}}</p>
+            <div class="card">
+                <h5 class="card-header">Description</h5>
+                <div class="card-body">
+                  <p class="card-text">{{movie.description}}</p>
+                </div>
+              </div>
+            <div class="card">
+                <h5 class="card-header">Release date</h5>
+                <div class="card-body">
+                  <p class="card-text">{{movie.release_date}}</p>
+                </div>
+            </div>
             <p>Ratings: {{movie.avgRating}} (based on {{movie.countRating}} ratings)</p>
             <div>
                 <p>Rate this movie:</p>
                 <span>
-                <select id="selectMovieRate">
-                    <option value="5">5</option>
-                    <option value="4">4</option>
-                    <option value="3">3</option>
-                    <option value="2">2</option>
-                    <option value="1">1</option>
-                </select>
+                {{ratingForm}}
                 <button class="btn btn-primary btn-sm" id="buttonRate">Rate</button>
                 <div id="spinner"></div>
             </span>
@@ -62,8 +63,10 @@
         document.getElementById('buttonRate').addEventListener('click', sendFeedback, true);
 
         function sendFeedback(){
-            rating = document.getElementById("selectMovieRate");
+            rating = document.getElementById("id_rating");
+            spinner = document.getElementById("spinner");
             movieID = '{{movie.id}}';
+            spinner.innerHTML = '<div class="spinner-border" role="status">';
 
             fetch("{% url 'core:rateMovie' %}", {
                 method: "POST",
@@ -75,6 +78,18 @@
             })
             .then(res => res.json())
             .then(res => {
+                spinner.innerHTML = '';
+                if(res['success'] == true){
+                    alert("Your feedback was saved!");
+                } else {
+                    if(res['reason'] == "this user already rated that movie"){
+                        alert("You already send feedback for that movie!")
+                    } else if(res['reason'] == "user is not authenticated"){
+                        alert("You need to be loged in to vote!")
+                    } else {
+                        alert("Unexpected error, please try again later");
+                    }
+                }
                 console.log(res);
             })
             console.log(movieID);

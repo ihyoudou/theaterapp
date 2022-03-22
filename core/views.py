@@ -7,8 +7,11 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from .models import Movies, Ratings
+from .forms import RatingForm
+
 from userAccount.models import Orders
 import json
+
 # Create your views here.
 
 def index(request):
@@ -24,9 +27,10 @@ def movieDetails(request, id):
 
     try:
         movie = Movies.objects.get(pk=id)
-    
+
         context = {
-            'movie': movie
+            'movie': movie,
+            'ratingForm': RatingForm()
         }
         return render(request, 'details.html', context)
     except ObjectDoesNotExist as err:
@@ -36,12 +40,18 @@ def movieDetails(request, id):
 def rateMovie(request):
 
     body = json.loads(request.body)
-    if body:
+    # checking if body is present
+    # validating user input
+    ratingOption = RatingForm({'rating':body['rate']})
+
+    if body and ratingOption.is_valid():
+        # checking if user is loged in 
+        # (it should be due to @login_required, but just a sanity check)
         if request.user:
             rate = body['rate']
             movie = Movies.objects.get(pk=body['movieID'])
 
-            print(Ratings.objects.filter(rated_by=request.user.id, movieID=movie))
+            
             if not Ratings.objects.filter(rated_by=request.user.id, movieID=movie):
                 
 
@@ -58,7 +68,8 @@ def rateMovie(request):
         else:
             return JsonResponse({'success': False, 'reason':'user is not authenticated'}) 
     else:
-        return JsonResponse({'success': False, 'reason': 'not a POST request'})
+        return JsonResponse({'success': False, 'reason': 'not a valid request'})
+
 @login_required
 def buyMovieTicket(request, id):
 
