@@ -69,6 +69,7 @@ def buyMovieTicket(request, id):
             order = Orders()
             order.ordered_by = user
             order.item = movie
+            order.price = movie.price
             order.save()
             messages.success(request, "Order was successful!")
             return redirect("core:index")

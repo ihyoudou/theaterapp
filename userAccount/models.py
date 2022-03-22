@@ -11,3 +11,4 @@ class Orders(models.Model):
     )
     item = models.ForeignKey(Movies, on_delete=models.CASCADE)
     ordered_at = models.DateTimeField(auto_now_add=True)
+    price = models.FloatField()

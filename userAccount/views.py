@@ -4,6 +4,10 @@ from django.contrib import messages
 
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
+
+
+from .models import Orders
 
 def register_request(request):
 	if request.method == "POST":
@@ -39,3 +43,9 @@ def logout_request(request):
 	logout(request)
 	messages.info(request, "You have successfully logged out.") 
 	return redirect("core:index")
+
+@login_required
+def userOrders(request):
+	orders = Orders.objects.filter(ordered_by=request.user.id)
+	return render(request, 'userOrders.html', {'orders': orders})
+
