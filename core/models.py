@@ -17,7 +17,7 @@ class Movies(models.Model):
         avg = 0
         if rating['avarage'] is not None:
             avg = float(rating['avarage'])
-        return avg
+        return round(avg, 2)
         
     def countRating(self):
         rating = Ratings.objects.filter(movieID=self).aggregate(count=Count('rating'))
