@@ -10,7 +10,6 @@ class Movies(models.Model):
     description = models.CharField(max_length=4096)
     release_date = models.DateField()
     price = models.FloatField()
-    rating = models.ForeignKey('Ratings', on_delete=models.SET_DEFAULT, default = "NA", null=True)
 
     def avgRating(self):
         rating = Ratings.objects.filter(movieID=self).aggregate(avarage=Avg('rating'))
