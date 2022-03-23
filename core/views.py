@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -18,8 +18,16 @@ import json
 # Create your views here.
 
 def index(request):
-    movies = Movies.objects.all()
-    paginator = Paginator(movies, 10)
+    movies_list = Movies.objects.all()
+    paginator = Paginator(movies_list, 10)
+    page = request.GET.get('page', 1)
+
+    try:
+        movies = paginator.page(page)
+    except PageNotAnInteger:
+        movies = paginator.page(1)
+    except EmptyPage:
+        movies = paginator.page(paginator.num_pages)
 
 
     context = {

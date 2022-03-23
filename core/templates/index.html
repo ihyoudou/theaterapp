@@ -14,32 +14,58 @@
           {% endfor %}
       </ul>
     {% endif %}
-    
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Release year</th>
-            <th scope="col">Rating</th>
-            <th scope="col">Price</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for movie in movies %}
+    {% if movies %}
+      <table class="table">
+          <thead>
             <tr>
-                <th scope="row">{{movie.id}}</th>
-                <td>{{movie.title}}</td>
-                <td>{{movie.release_date|date:"Y"}}</td>
-                <td>{{movie.avgRating}}</td>
-                <td>{{movie.price}}</td>
-                <td><a href="{% url 'core:movieDetails' movie.id %}"><button class="btn btn-primary">View</button></a></td>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Release year</th>
+              <th scope="col">Rating</th>
+              <th scope="col">Price</th>
+              <th scope="col">Action</th>
             </tr>
-        
+          </thead>
+          <tbody>
+              {% for movie in movies %}
+              <tr>
+                  <th scope="row">{{movie.id}}</th>
+                  <td>{{movie.title}}</td>
+                  <td>{{movie.release_date|date:"Y"}}</td>
+                  <td>{{movie.avgRating}}</td>
+                  <td>{{movie.price}}</td>
+                  <td><a href="{% url 'core:movieDetails' movie.id %}"><button class="btn btn-primary">View</button></a></td>
+              </tr>
+          
+              {% endfor %}
+          </tbody>
+        </table>
+
+        {% if movies.has_other_pages %}
+          <ul class="pagination">
+            {% if movies.has_previous %}
+              <li><a href="?page={{ movies.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+              <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in movies.paginator.page_range %}
+              {% if movies.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+              {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
             {% endfor %}
-        </tbody>
-      </table>
+            {% if movies.has_next %}
+              <li><a href="?page={{ movies.next_page_number }}">&raquo;</a></li>
+            {% else %}
+              <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+          </ul>
+        {% endif %}
+
+      {% else %}
+        <h3 class="text-center">No movies was found</h3>
+      {% endif %}
     
 </div>
 {% endblock %}

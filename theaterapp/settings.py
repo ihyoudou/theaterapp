@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-z%v$$fnic78t%jq^0#n7s7c+d2+k3q!vy*7#jkq65y5h&(7$d!
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'theaterapp.dev.issei.space',
+    '127.0.0.1',
     'theaterapp.herokuapp.com'
 ]
 
