@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-z%v$$fnic78t%jq^0#n7s7c+d2+k3q!vy*7#jkq65y5h&(7$d!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'theaterapp.dev.issei.space',
+    'theaterapp.herokuapp.com'
+]
 
 
 # Application definition
