@@ -1,3 +1,8 @@
+{% extends '_base.html' %}
+
+{% block title%}Login to your account{% endblock %}
+{% block content %}
+{% include '_navbar.html' %}
 <div class="container py-5">
     {% if messages %}
       <ul class="messages">
@@ -13,8 +18,10 @@
 	<h1>Login</h1>
 	<form method="POST">
 		{% csrf_token %}
-		{{ login_form}}                    
+		{{ login_form.as_p}}                    
 		<button class="btn btn-primary" type="submit">Login</button>
 	</form>
     <p class="text-center">Don't have an account? <a href="/register">Create an account</a>.</p>
 </div>
+
+{% endblock %}
