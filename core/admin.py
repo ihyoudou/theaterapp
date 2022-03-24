@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Movies, Ratings
+from .models import MovieInfo, Movies, Ratings
 from userAccount.models import Orders
 # Register your models here.
 
@@ -16,3 +16,7 @@ class OrdersAdmin(admin.ModelAdmin):
     fields = ['ordered_by', 'item', 'price']
     readonly_fields = ['ordered_at']
 admin.site.register(Orders, OrdersAdmin)
+
+class MoviesDetailAdmin(admin.ModelAdmin):
+    fields = ['director', 'movie']
+admin.site.register(MovieInfo, MoviesDetailAdmin)

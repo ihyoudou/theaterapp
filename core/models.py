@@ -26,7 +26,7 @@ class Movies(models.Model):
         return count
         
     def getDirector(self):
-        director = MovieInfo.objects.filter(movie=self)
+        director = MovieInfo.objects.get(movie=self)
         if director:
             return director
         else:

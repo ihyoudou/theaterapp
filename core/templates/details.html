@@ -10,7 +10,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md">
-            <img src="https://picsum.photos/400/600" class="img-fluid" alt="movie poster">
+            <img src="https://picsum.photos/seed/{{movie.pk}}/400/600" class="img-fluid" alt="movie poster">
         </div>
 
         <div class="col-md">
@@ -23,7 +23,7 @@
                 <hr>
                 {% if movie.getDirector %}
                     <h4>Director</h4>
-                    <span class="lead">{{movie.getDirector}}</span>
+                    <span class="lead">{{movie.getDirector.director}}</span>
                     <hr>
                 {% endif %}
 
@@ -38,6 +38,7 @@
                             <h3 class="text-center">{{movie.avgRating}}</h3>
                         </div>
                         <div class="col">
+
                             <span class="text-center">(based on {{movie.countRating}} ratings)</span>
 
                             <div>
