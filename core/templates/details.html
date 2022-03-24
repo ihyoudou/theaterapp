@@ -11,16 +11,16 @@
             <div>
                 <h4>Description</h4>
                 <p>{{movie.description}}</p>
-
+                {% if movie.getDirector %}
+                    <h4>Director: {{movie.getDirector}}</h4>
+                {% endif %}
                 <h4>Release date: {{movie.release_date}}</h4>
 
                 
                 <h4>Rating: {{movie.avgRating}}
                 <span>(based on {{movie.countRating}} ratings)</span></h4>
                 <h4>Ticket price: {{movie.price}}
-                    <a href="{% url 'core:buyMovieTicket' movie.id %}">
-                        <button class="btn btn-primary">Buy ticket</button>
-                    </a>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buyTicketModal" >Buy ticket</button>
                 </h4>
             </div>
             
@@ -41,8 +41,34 @@
 
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="buyTicketModal" tabindex="-1" aria-labelledby="buyTicketModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="buyTicketModalLabel">Buy ticket</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Do you want to buy ticket for movie "{{movie.title}}"?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="buyTicketBtnConfirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
+        spinner = document.getElementById("spinner");
+        function hideFunc() {
+            const buyTicketModal = document.querySelector('#buyTicketModal');
+            const modal = bootstrap.Modal.getInstance(buyTicketModal);    
+            modal.hide();
+        }
+
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -60,12 +86,39 @@
         }
         const csrftoken = getCookie('csrftoken');
 
+        document.getElementById('buyTicketBtnConfirm').addEventListener('click', buyTicket, true);
+        function buyTicket(){
+            spinner.innerHTML = '<div class="spinner-border" role="status">';
+
+            fetch("{% url 'core:buyMovieTicket' %}", {
+                method: "POST",
+                headers: {'X-CSRFToken': csrftoken},
+                body: JSON.stringify({
+                    movieID: '{{movie.id}}'
+                })
+            })
+            .then(res => res.json())
+            .then(res => {
+                spinner.innerHTML = '';
+                if(res['success'] == true){
+                    alert("Your purchase was successful!");
+                    
+                } else {
+                    if(res['reason'] == "Movie not found"){
+                        alert("Movie was not found")
+                    } else {
+                        alert("Unexpected error, please try again later");
+                    }
+                }
+                console.log(res);
+                hideFunc();
+            })
+        }
 
         document.getElementById('buttonRate').addEventListener('click', sendFeedback, true);
 
         function sendFeedback(){
             rating = document.getElementById("id_rating");
-            spinner = document.getElementById("spinner");
             movieID = '{{movie.id}}';
             spinner.innerHTML = '<div class="spinner-border" role="status">';
 

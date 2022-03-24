@@ -24,6 +24,13 @@ class Movies(models.Model):
         if rating['count'] is not None:
             count = int(rating['count'])
         return count
+        
+    def getDirector(self):
+        director = MovieInfo.objects.filter(movie=self)
+        if director:
+            return director
+        else:
+            return False
 
 class Ratings(models.Model):
     rating = models.IntegerField()

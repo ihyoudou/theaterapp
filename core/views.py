@@ -82,28 +82,21 @@ def rateMovie(request):
         return JsonResponse({'success': False, 'reason': 'not a valid request'})
 
 @login_required
-def buyMovieTicket(request, id):
-
+def buyMovieTicket(request):
+    body = json.loads(request.body)
     try:
-        movie = Movies.objects.get(pk=id)
+        movie = Movies.objects.get(pk=body['movieID'])
         user = User.objects.get(id=request.user.id)
-        if request.POST:
+        if body:
             order = Orders()
             order.ordered_by = user
             order.item = movie
             order.price = movie.price
             order.save()
-            messages.success(request, "Order was successful!")
-            return redirect("core:index")
-
+            
+            return JsonResponse({'success': True})
         else:
-            context = {
-                'title': "Buy ticket",
-                'desc': "Do you want to buy ticket for {}?".format(movie.title),
-                'buttonText': "Yes",
-                'ticket_price': movie.price
-            }
-            return render(request, 'form.html', context)
+            return JsonResponse({'success': False, 'reason': 'invalid request'})
 
     except ObjectDoesNotExist as err:
-        return HttpResponse("not found")
+        return JsonResponse({'success': False, 'reason': 'Movie not found'})
