@@ -1,4 +1,7 @@
 {% extends '_base.html' %}
+
+{% block title %}{{movie.title}} | {{APP_NAME}}{% endblock %}
+
 {% block content %}
 
 {% include '_navbar.html' %}
@@ -6,37 +9,58 @@
 
 <div class="container">
     <div class="row">
-        <div class="col">
+        <div class="col-md">
+            <img src="https://picsum.photos/400/600" class="img-fluid" alt="movie poster">
+        </div>
+
+        <div class="col-md">
             <h1>{{movie.title}}</h1>
             <div>
                 <h4>Description</h4>
+            
                 <p>{{movie.description}}</p>
-                {% if movie.getDirector %}
-                    <h4>Director: {{movie.getDirector}}</h4>
-                {% endif %}
-                <h4>Release date: {{movie.release_date}}</h4>
 
+                <hr>
+                {% if movie.getDirector %}
+                    <h4>Director</h4>
+                    <span class="lead">{{movie.getDirector}}</span>
+                    <hr>
+                {% endif %}
+
+                <h4>Release date</h4>
+                <span class="lead">{{movie.release_date}}</span>
+
+                <hr>
+                <h4>Rating</h4>
                 
-                <h4>Rating: {{movie.avgRating}}
-                <span>(based on {{movie.countRating}} ratings)</span></h4>
-                <h4>Ticket price: {{movie.price}}
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="text-center">{{movie.avgRating}}</h3>
+                        </div>
+                        <div class="col">
+                            <span class="text-center">(based on {{movie.countRating}} ratings)</span>
+
+                            <div>
+                                <span>
+                                    {{ratingForm}}
+                                    <button class="btn btn-primary btn-sm" id="buttonRate">Rate</button>
+                                    <div id="spinner"></div>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                <hr>
+                <h4>Ticket price: <span class="lead">{{movie.price}}</span>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buyTicketModal" >Buy ticket</button>
                 </h4>
             </div>
             
-            <div>
-                
-                <span>
-                {{ratingForm}}
-                <button class="btn btn-primary btn-sm" id="buttonRate">Rate</button>
-                <div id="spinner"></div>
-            </span>
-            </div>
+            
 
         </div>
-        <div class="col">
-            <img src="https://picsum.photos/400/600" class="img-fluid" alt="movie poster">
-        </div>
+        
     </div>
 
 </div>
