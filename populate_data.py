@@ -5,9 +5,9 @@ import django
 django.setup()
 
 import random
-from core.models import Movies, Ratings
+from core.models import Movies, Ratings, MoviePlay
 from faker import Faker
-
+from datetime import datetime, timedelta
 fakegen = Faker()
 
 def populate(N=5):
@@ -26,5 +26,13 @@ def populate(N=5):
             rating.movieID = movie
             rating.rating = random.uniform(1,10)
             rating.save()
+        
+        for entry in range(5):
+            movieplayentry = MoviePlay()
+            movieplayentry.movie = movie
+            movieplayentry.date = fakegen.date_between_dates(date_start=datetime.now(), date_end=datetime.now() + timedelta(days=14))
+            movieplayentry.maxTickets = random.uniform(2,100)
+            movieplayentry.save()
+
 
 populate(40)
