@@ -54,8 +54,32 @@
                     </div>
                     
                 <hr>
-                <h4>Ticket price: <span class="lead">{{movie.price}}</span>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buyTicketModal" >Buy ticket</button>
+                {% if movie.getMovieShowTime %}
+                <h4>Available dates</h4>
+                
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Available tickets</th>
+                            <th scope="col">Ticket price</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for date in movie.getMovieShowTime %}
+                                <tr>
+                                    <th scope="row">{{date.date}}</th>
+                                    <td>{{date.countAvailable}}</td>
+                                    <td>{{movie.price}}</td>
+                                    <td><button class="btn btn-primary ticketBtn" data-dateID="{{date.pk}}" data-dateString="{{date.date}}">Buy ticket</button></td>
+                                </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+                
                 </h4>
             </div>
             
@@ -76,7 +100,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Do you want to buy ticket for movie "{{movie.title}}"?
+          Do you want to buy ticket for movie "{{movie.title}}" on <span id="modalDate"></span>?
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -90,7 +114,23 @@
     document.addEventListener('DOMContentLoaded', (event) => {
         alerts = document.getElementById("alerts");
         spinner = document.getElementById("spinner");
+        var dateID;
 
+        [...document.querySelectorAll('.ticketBtn')].forEach(function(item) {
+            item.addEventListener('click', function() {
+                document.getElementById("modalDate").innerHTML = item.getAttribute("data-dateString");
+                showModal();
+                dateID = item.getAttribute("data-dateID");
+                // console.log(item.getAttribute("data-dateID"));
+            });
+        });
+
+        function showModal(){
+            var myModal = new bootstrap.Modal(document.getElementById("buyTicketModal"), {});
+            myModal.show();
+           
+        }
+        
         function hideFunc() {
             const buyTicketModal = document.querySelector('#buyTicketModal');
             const modal = bootstrap.Modal.getInstance(buyTicketModal);    
@@ -122,7 +162,8 @@
                 method: "POST",
                 headers: {'X-CSRFToken': csrftoken},
                 body: JSON.stringify({
-                    movieID: '{{movie.id}}'
+                    movieID: '{{movie.id}}',
+                    dateID: dateID
                 })
             })
             .then(res => res.json())
@@ -134,6 +175,9 @@
                 } else {
                     if(res['reason'] == "Movie not found"){
                         alerts.innerHTML = '<div class="alert alert-danger" role="alert">Movie was not found</div>';
+                    } else if(res['reason'] == "No more tickets are available"){
+                        alerts.innerHTML = '<div class="alert alert-warning" role="alert">No more tickets are available</div>';
+
                     } else {
                         alerts.innerHTML = '<div class="alert alert-warning" role="alert">Unexpected error, please try again</div>';
                     }

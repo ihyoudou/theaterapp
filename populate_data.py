@@ -20,11 +20,11 @@ def populate(N=5):
 
         movie.save()
 
-        for entry in range(100):
+        for entry in range(10):
             rating = Ratings()
             rating.rated_by = 1
             rating.movieID = movie
             rating.rating = random.uniform(1,10)
             rating.save()
 
-populate(10)
+populate(40)

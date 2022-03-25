@@ -4,11 +4,11 @@ from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.db.models import Avg, Count
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Movies, Ratings
+from .models import Movies, Ratings, MoviePlay
 from .forms import RatingForm
 
 from userAccount.models import Orders
@@ -99,16 +99,23 @@ def buyMovieTicket(request):
     try:
         movie = Movies.objects.get(pk=body['movieID'])
         user = User.objects.get(id=request.user.id)
-        if body:
-            order = Orders()
-            order.ordered_by = user
-            order.item = movie
-            order.price = movie.price
-            order.save()
-            
-            return JsonResponse({'success': True})
+        date = MoviePlay.objects.get(pk=body['dateID'])
+
+        if date.countAvailable()>0:
+
+        
+            if body:
+                order = Orders()
+                order.ordered_by = user
+                order.item = date
+                order.price = movie.price
+                order.save()
+                
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'reason': 'invalid request'})
         else:
-            return JsonResponse({'success': False, 'reason': 'invalid request'})
+            return JsonResponse({'success': False, 'reason':'No more tickets are available'})
 
     except ObjectDoesNotExist as err:
         return JsonResponse({'success': False, 'reason': 'Movie not found'})
