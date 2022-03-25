@@ -5,7 +5,7 @@ import django
 django.setup()
 
 import random
-from core.models import Movies
+from core.models import Movies, Ratings
 from faker import Faker
 
 fakegen = Faker()
@@ -20,4 +20,11 @@ def populate(N=5):
 
         movie.save()
 
-populate(50)
+        for entry in range(100):
+            rating = Ratings()
+            rating.rated_by = 1
+            rating.movieID = movie
+            rating.rating = random.uniform(1,10)
+            rating.save()
+
+populate(10)

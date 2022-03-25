@@ -10,18 +10,22 @@
         <thead>
         <tr>
             <th scope="col">#</th>
+            <th scope="col"></th>
             <th scope="col">Title</th>
             <th scope="col">Order date</th>
             <th scope="col">Price</th>
+            <th scope="col">View</th>
         </tr>
         </thead>
         <tbody>
             {% for order in orders %}
                 <tr>
                     <th>{{order.pk}}</th>
+                    <td><img src="https://picsum.photos/seed/{{order.item.pk}}/40/80" class="img-fluid" alt="poster for {{movie.title}}"></td>
                     <td>{{order.item.title}}</td>
                     <td>{{order.ordered_at}}</td>
                     <td>{{order.price}}</td>
+                    <td><a href="{% url 'core:movieDetails' order.item.pk %}"><button class="btn btn-primary">View</button></a></td>
                 </tr>
             {% endfor %}
         </tbody>

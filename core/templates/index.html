@@ -20,6 +20,7 @@
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col"></th>
               <th scope="col">Title</th>
               <th scope="col">Release year</th>
               <th scope="col">Rating</th>
@@ -31,6 +32,7 @@
               {% for movie in movies %}
               <tr>
                   <th scope="row">{{movie.id}}</th>
+                  <td><img src="https://picsum.photos/seed/{{movie.pk}}/40/80" class="img-fluid" alt="poster for {{movie.title}}"></td>
                   <td>{{movie.title}}</td>
                   <td>{{movie.release_date|date:"Y"}}</td>
                   <td>{{movie.avgRating}}</td>
