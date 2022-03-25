@@ -12,6 +12,11 @@
 
         </ul>
         <ul class="navbar-nav ms-auto">
+          <form class="d-flex" method="POST" action="{% url 'core:search' %}"">
+            <input class="form-control me-2" type="search" name="searchphrase" placeholder="Search" aria-label="Search" value="{{searchPhrase}}">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+            {% csrf_token %}
+          </form>
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Welcome, {{user.username}}</a>

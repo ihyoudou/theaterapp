@@ -49,6 +49,18 @@ def movieDetails(request, id):
     except ObjectDoesNotExist as err:
         return HttpResponse("not found")
 
+def search(request):
+    if request.POST:
+        searchPhrase = request.POST.get('searchphrase')
+
+        context = {
+            'movies': Movies.objects.filter(title__icontains=searchPhrase),
+            'searchPhrase': searchPhrase
+        }
+        return render(request, 'index.html', context)
+    else:
+        return redirect('core:index')
+
 @login_required
 def rateMovie(request):
 

@@ -8,6 +8,7 @@
 
 
 <div class="container">
+    <div id="alerts"></div>
     <div class="row">
         <div class="col-md">
             <img src="https://picsum.photos/seed/{{movie.pk}}/400/600" class="img-fluid" alt="movie poster">
@@ -87,7 +88,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
+        alerts = document.getElementById("alerts");
         spinner = document.getElementById("spinner");
+
         function hideFunc() {
             const buyTicketModal = document.querySelector('#buyTicketModal');
             const modal = bootstrap.Modal.getInstance(buyTicketModal);    
@@ -126,13 +129,13 @@
             .then(res => {
                 spinner.innerHTML = '';
                 if(res['success'] == true){
-                    alert("Your purchase was successful!");
+                    alerts.innerHTML = '<div class="alert alert-success" role="alert">Ticket purchase was successful!</div>';
                     
                 } else {
                     if(res['reason'] == "Movie not found"){
-                        alert("Movie was not found")
+                        alerts.innerHTML = '<div class="alert alert-danger" role="alert">Movie was not found</div>';
                     } else {
-                        alert("Unexpected error, please try again later");
+                        alerts.innerHTML = '<div class="alert alert-warning" role="alert">Unexpected error, please try again</div>';
                     }
                 }
                 console.log(res);
@@ -159,14 +162,14 @@
             .then(res => {
                 spinner.innerHTML = '';
                 if(res['success'] == true){
-                    alert("Your feedback was saved!");
+                    alerts.innerHTML = '<div class="alert alert-success" role="alert">Your feedback was succefully saved!</div>';
                 } else {
                     if(res['reason'] == "this user already rated that movie"){
-                        alert("You already send feedback for that movie!")
+                        alerts.innerHTML = '<div class="alert alert-warning" role="alert">You already left a feedback for that movie!</div>';
                     } else if(res['reason'] == "user is not authenticated"){
-                        alert("You need to be loged in to vote!")
+                        alerts.innerHTML = '<div class="alert alert-warning" role="alert">You need to be log in to vote</div>';
                     } else {
-                        alert("Unexpected error, please try again later");
+                        alerts.innerHTML = '<div class="alert alert-warning" role="alert">Unexpected error, please try again</div>';
                     }
                 }
                 console.log(res);
