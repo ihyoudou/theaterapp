@@ -36,7 +36,7 @@ class Movies(models.Model):
 
     def getMovieShowTime(self):
         today = datetime.today()
-        dates = MoviePlay.objects.filter(movie=self, date__gte=today)
+        dates = MoviePlay.objects.filter(movie=self, date__gte=today).order_by('date')
         if dates:
             return dates
         else:

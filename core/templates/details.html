@@ -72,7 +72,13 @@
                                     <th scope="row">{{date.date}}</th>
                                     <td>{{date.countAvailable}}</td>
                                     <td>{{movie.price}}</td>
-                                    <td><button class="btn btn-primary ticketBtn" data-dateID="{{date.pk}}" data-dateString="{{date.date}}">Buy ticket</button></td>
+                                    <td>
+                                        {% if date.countAvailable > 0 %}
+                                            <button class="btn btn-primary ticketBtn" data-dateID="{{date.pk}}" data-dateString="{{date.date}}">Buy ticket</button>
+                                        {% else %}
+                                            victim of success
+                                        {% endif %}
+                                    </td>
                                 </tr>
 
                             {% endfor %}
