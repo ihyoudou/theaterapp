@@ -1,5 +1,5 @@
 # Theaterapp
-![page with movie details](https://github.com/ihyoudou/theaterapp/blob/main/movie_details_view.png?raw=true)
+![page with movie details](https://raw.githubusercontent.com/ihyoudou/theaterapp/main/readme/movie_details_view.png)
 
 
 Theaterapp is a test app written in Python Django as a exercise.
