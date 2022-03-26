@@ -28,6 +28,11 @@ python3 manage.py makemigration
 python3 manage.py migrate
 ```
 
+Start server
+```
+python3 manage.py runserver
+```
+
 You can also populate the database with example data using populate_data script
 ```
 python3 populate_data.py
